@@ -16,42 +16,35 @@ const express = require("express");
 const app = express();
 const https = require("https");
 
+app.set('view engine', "ejs");
+
+var quoteData;
 var quote;
 var size;
 var n;
+var link;
 
 app.get("/", function(req, res){
   url = "https://api.kanye.rest/?format=text";
   https.get(url, function(response){
-    quote = '';
+    quoteData = '';
     response.on("data", function(data){
-      quote+=data;
+      quoteData+=data;
     });
 
     response.on("end", function(){
-      actualThing = JSON.parse(quote);
+      actualThing = JSON.parse(quoteData);
       size = imageLinks.length;
       n = Math.floor(Math.random() * size);
-      res.send(`
-        <h1><center>Kanye West Quote Generator<center></h1>
-        <table style="width:100%">
-          <tr>
-            <td><img src=`+ imageLinks[n] + ` width="350" height="350"></td>
-            <td><h3><q>`+ actualThing.quote +`</q> -Kanye West</h3></td>
-          </tr>
-        </table>
 
-          <br>
-          <br>
-          <br>
-          <center>
-          <form class="" action="/" method="post">
-            <button type="submit" name="button">Next Quote</button>
-          </form>
-          </center>
+      quote = actualThing.quote;
+      link = imageLinks[n];
 
+      res.render("index", {
+        quote : quote,
+        link: link
+      });
 
-        `);
     });
   });
 });
@@ -59,35 +52,24 @@ app.get("/", function(req, res){
 app.post("/", function(req, res){
   url = "https://api.kanye.rest/?format=text";
   https.get(url, function(response){
-    quote = '';
+    quoteData = '';
     response.on("data", function(data){
-      quote+=data;
+      quoteData+=data;
     });
 
     response.on("end", function(){
-      actualThing = JSON.parse(quote);
+      actualThing = JSON.parse(quoteData);
       size = imageLinks.length;
       n = Math.floor(Math.random() * size);
-      res.send(`
-        <h1><center>Kanye West Quote Generator<center></h1>
-        <table style="width:100%">
-          <tr>
-            <td><img src=`+ imageLinks[n] + ` width="350" height="350"></td>
-            <td><h3><q>`+ actualThing.quote +`</q> -Kanye West</h3></td>
-          </tr>
-        </table>
 
-          <br>
-          <br>
-          <br>
-          <center>
-          <form class="" action="/" method="post">
-            <button type="submit" name="button">Next Quote</button>
-          </form>
-          </center>
+      quote = actualThing.quote;
+      link = imageLinks[n];
 
+      res.render("index", {
+        quote : quote,
+        link: link
+      });
 
-        `);
     });
   });
 });
